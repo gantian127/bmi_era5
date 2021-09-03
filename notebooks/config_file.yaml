@@ -1,0 +1,24 @@
+bmi-era5:
+  name: reanalysis-era5-single-levels
+  request:
+    variable:
+      - 2m_temperature
+      - total_precipitation
+    product_type: reanalysis
+    year: 2021
+    month: 01
+    day: 01
+    time:
+      - 00:00
+      - 01:00
+      - 02:00
+    format: netcdf
+    area:
+      - 41
+      - -109
+      - 36
+      - -102
+    grid:
+      - 0.25
+      - 0.25
+  path: single_hour.nc

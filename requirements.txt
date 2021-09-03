@@ -1,0 +1,6 @@
+bmipy
+netcdf4
+numpy
+pyyaml
+requests
+xarray
