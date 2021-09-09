@@ -52,7 +52,8 @@ After downloading the source code, run the following command from top-level fold
 Download ERA5 Data
 ++++++++++++++++++++++++
 
-Learn more details of the examples from the `tutorial notebook <https://github.com/gantian127/bmi_era5/tree/master/notebooks>`_ provided in this package.
+Learn more details of the examples from the `tutorial notebook <https://github.com/gantian127/bmi_era5/blob/master/notebooks/bmi_era5.ipynb>`_ provided in this package.
+You can also launch binder to test and run the code below. |binder|
 
 **Example 1**: use CDS API to download the ERA5 data.
 
