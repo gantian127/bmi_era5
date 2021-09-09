@@ -52,16 +52,17 @@ class Era5Data:
     def get_time_info(self):
         time_info = {}
 
+        # time values are float in BMI time function
         if self._data:
             time_info = {
-                'start_time': self._data.time.values[0],
+                'start_time': float(self._data.time.values[0]),
                 'time_step': 0.0 if len(self._data.time.values) == 1 else
-                self._data.time.values[1] - self._data.time.values[0],
-                'end_time': self._data.time.values[-1],
+                float(self._data.time.values[1] - self._data.time.values[0]),
+                'end_time': float(self._data.time.values[-1]),
                 'total_steps': len(self._data.time.values),
                 'time_units': self._data.time.units,
                 'calendar': self._data.time.calendar,
-                'time_value': self._data.time.values,
+                'time_value': self._data.time.values.astype('float'),
             }
 
         return time_info
