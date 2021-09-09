@@ -4,10 +4,12 @@
     :alt: bmi_era5
     :target: https://bmi_era5.readthedocs.io/
 
-`bmi_era5 <https://github.com/gantian127/bmi_era5/>`_ is the Basic Model Interface (`BMI <https://bmi-spec.readthedocs.io/en/latest/>`_) implementation
+`bmi_era5 <https://github.com/gantian127/bmi_era5/>`_ package is an implementation of the Basic Model Interface (`BMI <https://bmi-spec.readthedocs.io/en/latest/>`_)
 for the `ERA5 <https://confluence.ecmwf.int/display/CKB/ERA5>`_ dataset.
-This package can help convert the ERA5 data  into a reusable, plug-and-play
-data component (currently support 3 dimensional ERA5 data) for `PyMT <https://pymt.readthedocs.io/en/latest/?badge=latest>`_ modeling framework developed by Community Surface Dynamics Modeling System
+This package uses the `CDS API <https://cds.climate.copernicus.eu/api-how-to>`_ to download the ERA5 dataset and wraps the dataset with BMI for data control and query
+(currently support 3 dimensional ERA5 dataset).
+This package is not implemented for people to use but is the key element to convert the ERA5 dataset into
+a data component for the `PyMT <https://pymt.readthedocs.io/en/latest/?badge=latest>`_ modeling framework developed by Community Surface Dynamics Modeling System
 (`CSDMS <https://csdms.colorado.edu/wiki/Main_Page>`_).
 
 If you have any suggestion to improve the current function, please create a github issue
