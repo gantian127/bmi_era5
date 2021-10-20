@@ -76,7 +76,7 @@ class Era5Data:
 
                 var_info[var.long_name] = {
                     'var_name': var_name,
-                    'dtype': str(var.dtype),
+                    'dtype': type(var.scale_factor).__name__ if 'scale_factor' in var.attrs.keys() else str(var.dtype),
                     'itemsize': var.values.itemsize,
                     'nbytes': var.values[0].nbytes,  # current time step nbytes
                     'units': var.units,
