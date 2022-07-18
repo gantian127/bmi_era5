@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os.path
 import xarray as xr
 import cdsapi
 
@@ -15,8 +16,10 @@ class Era5Data:
         return self._data
 
     def get_data(self, name, request, path):
-        c = cdsapi.Client()
-        c.retrieve(name, request, path)
+
+        if not os.path.exists(path):
+            c = cdsapi.Client()
+            c.retrieve(name, request, path)
 
         self._data = xr.open_dataset(path, decode_cf=False)
         self._path = path
