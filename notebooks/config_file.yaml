@@ -9,9 +9,9 @@ bmi-era5:
     month: 01
     day: 01
     time:
-      - 00:00
-      - 01:00
-      - 02:00
+      - '00:00'
+      - '01:00'
+      - '02:00'
     format: netcdf
     area:
       - 41
