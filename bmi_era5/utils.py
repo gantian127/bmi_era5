@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os.path
 import xarray as xr
 import cdsapi
 
@@ -15,8 +16,10 @@ class Era5Data:
         return self._data
 
     def get_data(self, name, request, path):
-        c = cdsapi.Client()
-        c.retrieve(name, request, path)
+
+        if not os.path.exists(path):
+            c = cdsapi.Client()
+            c.retrieve(name, request, path)
 
         self._data = xr.open_dataset(path, decode_cf=False)
         self._path = path
@@ -35,8 +38,14 @@ class Era5Data:
             shape = [len(self._data.coords[coor]) for coor in ['number', 'level', 'latitude', 'longitude']
                      if coor in self._data.dims]  # [nz, ny, nx] order in bmi,
 
-            y_spacing = round(self._data.coords['latitude'].values[0] - self._data.coords['latitude'].values[1], 3)
-            x_spacing = round(self._data.coords['longitude'].values[1] - self._data.coords['longitude'].values[0], 3)
+            if len(self._data.coords['latitude'].values) > 1 and len(self._data.coords['longitude'].values) > 1:
+                y_spacing = round(self._data.coords['latitude'].values[0] - self._data.coords['latitude'].values[1], 3)
+                x_spacing = round(self._data.coords['longitude'].values[1] - self._data.coords['longitude'].values[0], 3)
+            elif 'grid' in self._request.keys():
+                y_spacing = self._request['grid'][1]
+                x_spacing = self._request['grid'][0]
+            else:
+                raise Exception('The configuration file needs to specify the "grid" info in the "request" parameter.')
 
             y_lowerleft = self._data.coords['latitude'].values[-1]
             x_lowerleft = self._data.coords['longitude'].values[0]
