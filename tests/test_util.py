@@ -62,7 +62,7 @@ def test_get_var_info(tmpdir, name, file, era5_req):
 
     var = var_info_2['Total precipitation']
     assert var['var_name'] == 'tp'
-    assert var['dtype'] == 'int16'
+    assert var['dtype'] == 'float64'
     assert var['itemsize'] == 2
     assert var['nbytes'] == 1218
     assert var['units'] == 'm'
