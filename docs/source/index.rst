@@ -8,8 +8,10 @@
 for the `ERA5 <https://confluence.ecmwf.int/display/CKB/ERA5>`_ dataset.
 This package uses the `CDS API <https://cds.climate.copernicus.eu/api-how-to>`_ to download the ERA5 dataset and wraps the dataset with BMI for data control and query
 (currently support 3 dimensional ERA5 dataset).
+
 This package is not implemented for people to use but is the key element to convert the ERA5 dataset into
-a data component for the `PyMT <https://pymt.readthedocs.io/en/latest/?badge=latest>`_ modeling framework developed by Community Surface Dynamics Modeling System
+a data component (`pymt_era5 <https://pymt-era5.readthedocs.io/>`_) for the `PyMT <https://pymt.readthedocs.io/en/latest/?badge=latest>`_
+modeling framework developed by Community Surface Dynamics Modeling System
 (`CSDMS <https://csdms.colorado.edu/wiki/Main_Page>`_).
 
 If you have any suggestion to improve the current function, please create a github issue
