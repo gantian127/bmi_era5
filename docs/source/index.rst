@@ -36,9 +36,10 @@ The bmi_era5 package and its dependencies can be installed with pip
 
     $ pip install bmi_era5
 
-..
-    or conda
-    .. code-block:: console
+or conda
+
+.. code-block:: console
+
     $ conda install -c conda-forge bmi_era5
 
 **From Source**
