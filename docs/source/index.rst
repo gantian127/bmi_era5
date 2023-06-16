@@ -2,7 +2,7 @@
     :align: center
     :scale: 15%
     :alt: bmi_era5
-    :target: https://bmi-era5.readthedocs.io/
+    :target: https://bmi-era5.readthedocs.io/en/latest/
 
 `bmi_era5 <https://github.com/gantian127/bmi_era5/>`_ package is an implementation of the Basic Model Interface (`BMI <https://bmi-spec.readthedocs.io/en/latest/>`_)
 for the `ERA5 <https://confluence.ecmwf.int/display/CKB/ERA5>`_ dataset.
