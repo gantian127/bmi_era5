@@ -18,14 +18,11 @@ If you have any suggestion to improve the current function, please create a gith
 `here <https://github.com/gantian127/bmi_era5/issues>`_.
 
 
-Getting Started
-===============
-
 Installation
 ++++++++++++
 
 Please make sure to first install the
-`CDS API <https://confluence.ecmwf.int/display/CKB/How+to+download+ERA5#HowtodownloadERA5-4-DownloadERA5familydatathroughtheCDSAPI>`_
+`cdsapi <https://confluence.ecmwf.int/display/CKB/How+to+download+ERA5#HowtodownloadERA5-4-DownloadERA5familydatathroughtheCDSAPI>`_
 and then follow the instructions below to install the bmi_era5 package.
 
 **Stable Release**
@@ -52,11 +49,14 @@ After downloading the source code, run the following command from top-level fold
     $ pip install -e .
 
 
-Download ERA5 Data
-++++++++++++++++++++++++
+Quick Start
++++++++++++++
 
-Learn more details of the examples from the `tutorial notebook <https://github.com/gantian127/bmi_era5/blob/master/notebooks/bmi_era5.ipynb>`_ provided in this package.
-You can also launch binder to test and run the code below. |binder|
+Below shows how to use two methods to download the ERA5 datasets.
+
+You can learn more details from the `tutorial notebook <https://github.com/gantian127/bmi_era5/blob/master/notebooks/bmi_era5.ipynb>`_.
+To run this notebook, please go to the `CSDMS EKT Lab <https://csdms.colorado.edu/wiki/Lab-0018>`_ and follow the instruction in the "Lab notes" section.
+
 
 **Example 1**: use CDS API to download the ERA5 data.
 
@@ -163,6 +163,9 @@ You can also launch binder to test and run the code below. |binder|
     plt.xlabel('longitude [degree_east]')
     plt.ylabel('latitude [degree_north]')
     plt.title('2 metre temperature in Colorado on Jan 1st, 2021 at 00:00')
+
+    # finalize the data component
+    data_comp.finalize()
 
 |tif_plot|
 
