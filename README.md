@@ -1,5 +1,5 @@
 # bmi_era5
-[![Documentation Status](https://readthedocs.org/projects/bmi_era5/badge/?version=latest)](https://bmi_era5.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/bmi_era5/badge/?version=latest)](https://bmi-era5.readthedocs.io/en/latest/?badge=latest)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/gantian127/bmi_era5/blob/master/LICENSE.txt)
 
 
