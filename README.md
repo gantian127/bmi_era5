@@ -16,7 +16,6 @@ by Community Surface Dynamics Modeling System ([CSDMS](https://csdms.colorado.ed
 If you have any suggestion to improve the current function, please create a github issue 
 [here](https://github.com/gantian127/bmi_era5/issues).
 
-## Get Started
 
 ### Install package
 
