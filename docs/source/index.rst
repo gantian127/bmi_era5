@@ -22,7 +22,7 @@ Installation
 ++++++++++++
 
 Please make sure to first install the
-`cdsapi <https://confluence.ecmwf.int/display/CKB/How+to+download+ERA5#HowtodownloadERA5-4-DownloadERA5familydatathroughtheCDSAPI>`_
+`CDS API <https://cds.climate.copernicus.eu/api-how-to>`_
 and then follow the instructions below to install the bmi_era5 package.
 
 **Stable Release**
