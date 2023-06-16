@@ -16,8 +16,7 @@ def install_cds(config_path=''):
 
     print('CDS API Key file is created.')
 
-    # install cdsapi
-    install = subprocess.run(["pip", "install", "cdsapi"], check=True)
-    if install.returncode == 0:
-        print('cdsapi package is successfully installed.')
-    
+    # # install cdsapi
+    # install = subprocess.run(["pip", "install", "cdsapi"], check=True)
+    # if install.returncode == 0:
+    #     print('cdsapi package is successfully installed.')
