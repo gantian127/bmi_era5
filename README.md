@@ -1,7 +1,6 @@
 # bmi_era5
 [![Documentation Status](https://readthedocs.org/projects/bmi_era5/badge/?version=latest)](https://bmi_era5.readthedocs.io/en/latest/?badge=latest)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/gantian127/bmi_era5/blob/master/LICENSE.txt)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/gantian127/bmi_era5/master?filepath=notebooks%2Fbmi_era5.ipynb)
 
 
 bmi_era5 package is an implementation of the Basic Model Interface ([BMI](https://bmi-spec.readthedocs.io/en/latest/)) 
@@ -19,13 +18,13 @@ If you have any suggestion to improve the current function, please create a gith
 
 ## Get Started
 
-#### Install package
+### Install package
 
 Please make sure to first install the
 [CDS API](https://cds.climate.copernicus.eu/api-how-to)
 and then follow the instructions below to install the bmi_era5 package.
 
-##### Stable Release
+#### Stable Release
 
 The bmi_era5 package and its dependencies can be installed with pip
 ```
@@ -37,7 +36,7 @@ or conda
 $ conda install -c conda-forge bmi_era5 
 ```
 
-##### From Source
+#### From Source
 
 After downloading the source code, run the following command from top-level folder 
 (the one that contains setup.py) to install bmi_era5.
@@ -45,12 +44,13 @@ After downloading the source code, run the following command from top-level fold
 $ pip install -e .
 ```
 
-#### Download ERA5 Data
+### Quick Start
+Below shows how to use two methods to download the ERA5 datasets.
 
-Learn more details of the examples from the [tutorial notebook](https://github.com/gantian127/bmi_era5/blob/master/notebooks/bmi_era5.ipynb) 
-provided in this package. You can also launch binder to test and run the code below.
+You can learn more details from the [tutorial notebook](https://github.com/gantian127/bmi_era5/blob/master/notebooks/bmi_era5.ipynb).
+To run this notebook, please go to the [CSDMS EKT Lab](https://csdms.colorado.edu/wiki/Lab-0018) and follow the instruction in the "Lab notes" section.
 
-##### Example 1: use CDS API to download the ERA5 data 
+#### Example 1: use CDS API to download the ERA5 data 
 
 ```python
 import cdsapi
@@ -87,7 +87,7 @@ plt.title('2 metre temperature in Colorado on Jan 1st, 2021 at 00:00')
 ![tif_plot](docs/source/_static/tif_plot.png)
 
 
-##### Example 2: use BmiEra5 class to download the ERA5 data (Demonstration of how to use BMI)
+#### Example 2: use BmiEra5 class to download the ERA5 data (Demonstration of how to use BMI)
 
 ```python
 from bmi_era5 import BmiEra5
@@ -154,6 +154,9 @@ cbar.set_label('2 metre temperature [K]')
 plt.xlabel('longitude [degree_east]')
 plt.ylabel('latitude [degree_north]')
 plt.title('2 metre temperature in Colorado on Jan 1st, 2021 at 00:00')
+
+# finalize the data component
+data_comp.finalize()
 ```
 
 ![tif_plot](docs/source/_static/tif_plot.png)
