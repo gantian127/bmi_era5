@@ -1,4 +1,5 @@
 # bmi_era5
+[![DOI](https://zenodo.org/badge/402911538.svg)](https://zenodo.org/doi/10.5281/zenodo.10368878)
 [![Documentation Status](https://readthedocs.org/projects/bmi_era5/badge/?version=latest)](https://bmi-era5.readthedocs.io/en/latest/?badge=latest)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/gantian127/bmi_era5/blob/master/LICENSE.txt)
 
