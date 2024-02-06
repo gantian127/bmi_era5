@@ -60,29 +60,29 @@ import matplotlib.pyplot as plt
 c = cdsapi.Client()
 
 c.retrieve(
-    'reanalysis-era5-single-levels',
+    "reanalysis-era5-single-levels",
     {
-        'product_type': 'reanalysis',
-        'format': 'netcdf',
-        'variable': ['2m_temperature', 'total_precipitation'],
-        'year': '2021',
-        'month': '01',
-        'day': '01',
-        'time': [ '00:00', '01:00', '02:00'],
-        'area': [ 41, -109, 36, -102],
-        'grid': [0.25, 0.25]
+        "product_type": "reanalysis",
+        "format": "netcdf",
+        "variable": ["2m_temperature", "total_precipitation"],
+        "year": "2021",
+        "month": "01",
+        "day": "01",
+        "time": [ "00:00", "01:00", "02:00"],
+        "area": [ 41, -109, 36, -102],
+        "grid": [0.25, 0.25]
     },
-    'download.nc')
+    "download.nc")
 
 # load netCDF data
-dataset = xarray.open_dataset('download.nc')
+dataset = xarray.open_dataset("download.nc")
 
 # select 2 meter temperature on 2021-01-01 at 00:00 
 air_temp = dataset.t2m.isel(time=0)
 
 # plot data
 air_temp.plot(figsize=(9,5))
-plt.title('2 metre temperature in Colorado on Jan 1st, 2021 at 00:00')
+plt.title("2 metre temperature in Colorado on Jan 1st, 2021 at 00:00")
 ```
 ![tif_plot](docs/source/_static/tif_plot.png)
 
@@ -95,7 +95,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 data_comp = BmiEra5()
-data_comp.initialize('config_file.yaml')
+data_comp.initialize("config_file.yaml")
 
 # get variable info
 for var_name in  data_comp.get_output_var_names():
@@ -105,17 +105,27 @@ for var_name in  data_comp.get_output_var_names():
     var_grid = data_comp.get_var_grid(var_name)
     var_itemsize = data_comp.get_var_itemsize(var_name)
     var_nbytes = data_comp.get_var_nbytes(var_name)
-    print('variable_name: {} \nvar_unit: {} \nvar_location: {} \nvar_type: {} \nvar_grid: {} \nvar_itemsize: {}' 
-            '\nvar_nbytes: {} \n'. format(var_name, var_unit, var_location, var_type, var_grid, var_itemsize, var_nbytes))
 
+    print(f"{var_name=}")
+    print(f"{var_unit=}")
+    print(f"{var_location=}")
+    print(f"{var_type=}")
+    print(f"{var_grid=}")
+    print(f"{var_itemsize=}")
+    print(f"{var_nbytes=}")
+    
 # get time info
 start_time = data_comp.get_start_time()
 end_time = data_comp.get_end_time()
 time_step = data_comp.get_time_step()
 time_unit = data_comp.get_time_units()
 time_steps = int((end_time - start_time)/time_step) + 1
-print('start_time:{} \nend_time:{} \ntime_step:{} \ntime_unit:{} \ntime_steps:{}'.format(
-    start_time, end_time, time_step, time_unit, time_steps))
+
+print(f"{start_time=}")
+print(f"{end_time=}")
+print(f"{time_step=}")
+print(f"{time_unit=}")
+print(f"{time_steps=}")
 
 # get variable grid info 
 grid_rank = data_comp.get_grid_rank(var_grid) 
@@ -130,12 +140,15 @@ data_comp.get_grid_spacing(var_grid, grid_spacing)
 grid_origin = np.empty(grid_rank)
 data_comp.get_grid_origin(var_grid, grid_origin)
 
-print('grid_rank: {} \ngrid_size: {} \ngrid_shape: {} \ngrid_spacing: {} \ngrid_origin: {}'.format(
-    grid_rank, grid_size, grid_shape, grid_spacing, grid_origin))
+print(f"{grid_rank=}")
+print(f"{grid_size=}")
+print(f"{grid_shape=}")
+print(f"{grid_spacing=}")
+print(f"{grid_origin=}")
 
 # get variable data 
 data = np.empty(grid_size, var_type)
-data_comp.get_value('2 metre temperature', data)
+data_comp.get_value("2 metre temperature", data)
 data_2D = data.reshape(grid_shape)
 
 # get X, Y extent for plot
@@ -150,10 +163,10 @@ extent = [min_x - dx, max_x + dx, min_y - dy, max_y + dy]
 fig, ax = plt.subplots(1,1, figsize=(9,5))
 im = ax.imshow(data_2D, extent=extent)
 cbar = fig.colorbar(im)
-cbar.set_label('2 metre temperature [K]')
-plt.xlabel('longitude [degree_east]')
-plt.ylabel('latitude [degree_north]')
-plt.title('2 metre temperature in Colorado on Jan 1st, 2021 at 00:00')
+cbar.set_label("2 metre temperature [K]")
+plt.xlabel("longitude [degree_east]")
+plt.ylabel("latitude [degree_north]")
+plt.title("2 metre temperature in Colorado on Jan 1st, 2021 at 00:00")
 
 # finalize the data component
 data_comp.finalize()
