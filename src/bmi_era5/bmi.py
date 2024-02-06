@@ -1,13 +1,12 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
 from collections import namedtuple
-from typing import Tuple
 
 import numpy
 import yaml
 
 from bmipy import Bmi
 
-from bmi_era5 import Era5Data
+from bmi_era5.utils import Era5Data
 
 BmiVar = namedtuple(
     "BmiVar", ["dtype", "itemsize", "nbytes", "units", "location", "grid"]
@@ -323,7 +322,7 @@ class BmiEra5(Bmi):
         """
         raise NotImplementedError("get_grid_z")
 
-    def get_input_var_names(self) -> Tuple[str]:
+    def get_input_var_names(self) -> tuple[str]:
         """List of a model's input variables.
         Input variable names must be CSDMS Standard Names, also known
         as *long variable names*.
@@ -351,7 +350,7 @@ class BmiEra5(Bmi):
         """
         return len(self._input_var_names)
 
-    def get_output_var_names(self) -> Tuple[str]:
+    def get_output_var_names(self) -> tuple[str]:
         """List of a model's output variables.
         Output variable names must be CSDMS Standard Names, also known
         as *long variable names*.
