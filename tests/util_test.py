@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 
+import pytest
 import xarray
 from bmi_era5 import Era5Data
 

@@ -61,7 +61,8 @@ class Era5Data:
                 x_spacing = self._request["grid"][0]
             else:
                 raise Exception(
-                    'The configuration file needs to specify the "grid" info in the "request" parameter.'
+                    "The configuration file needs to specify the "
+                    '"grid" info in the "request" parameter.'
                 )
 
             y_lowerleft = self._data.coords["latitude"].values[-1]

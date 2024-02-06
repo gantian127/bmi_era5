@@ -441,7 +441,8 @@ class BmiEra5(Bmi):
         array_like
             Value of the model variable at the given location.
         """
-        # return the value at current time step with given index in 1D or 2D grid. when it is scalar no need for ind
+        # return the value at current time step with given index in 1D or 2D grid.
+        # when it is scalar no need for ind
         dest[:] = self.get_value_ptr(name).reshape(-1)[inds]
         return dest
 
@@ -459,7 +460,8 @@ class BmiEra5(Bmi):
         array_like
             A reference to a model variable.
         """
-        # return a reference of all the value at current time step. mainly for input data. not useful for scalar value
+        # return a reference of all the value at current time step.
+        # mainly for input data. not useful for scalar value
         add_offset = self._dataset[self._var_name_mapping[name]].add_offset
         scale_factor = self._dataset[self._var_name_mapping[name]].scale_factor
 
