@@ -3,6 +3,7 @@
 *.py[cod]
 .coverage
 .nox/
+.idea/
 __pycache__/
 build/
 dist/
