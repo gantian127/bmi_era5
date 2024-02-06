@@ -4,25 +4,21 @@
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/gantian127/bmi_era5/blob/master/LICENSE.txt)
 
 
-bmi_era5 package is an implementation of the Basic Model Interface ([BMI](https://bmi-spec.readthedocs.io/en/latest/)) 
-for the [ERA5](https://confluence.ecmwf.int/display/CKB/ERA5) dataset. 
-This package uses the [CDS API](https://cds.climate.copernicus.eu/api-how-to) to download the ERA5 dataset and wraps the dataset with BMI for data control and query 
-(currently support 3 dimensional ERA5 dataset). 
+bmi_era5 package is an implementation of the Basic Model Interface ([BMI](https://bmi-spec.readthedocs.io/en/latest/))
+for the [ERA5](https://confluence.ecmwf.int/display/CKB/ERA5) dataset.
+This package uses the [CDS API](https://cds.climate.copernicus.eu/api-how-to) to download the ERA5 dataset and wraps the dataset with BMI for data control and query
+(currently support 3 dimensional ERA5 dataset).
 
-This package is not implemented for people to use but is the key element to convert the ERA5 dataset into 
-a data component ([pymt_era5](https://pymt-era5.readthedocs.io/)) for 
-the [PyMT](https://pymt.readthedocs.io/en/latest/?badge=latest) modeling framework developed 
-by Community Surface Dynamics Modeling System ([CSDMS](https://csdms.colorado.edu/wiki/Main_Page)). 
- 
-If you have any suggestion to improve the current function, please create a github issue 
+This package is not implemented for people to use but is the key element to convert the ERA5 dataset into
+a data component ([pymt_era5](https://pymt-era5.readthedocs.io/)) for
+the [PyMT](https://pymt.readthedocs.io/en/latest/?badge=latest) modeling framework developed
+by Community Surface Dynamics Modeling System ([CSDMS](https://csdms.colorado.edu/wiki/Main_Page)).
+
+If you have any suggestion to improve the current function, please create a github issue
 [here](https://github.com/gantian127/bmi_era5/issues).
 
 
 ### Install package
-
-Please make sure to first install the
-[CDS API](https://cds.climate.copernicus.eu/api-how-to)
-and then follow the instructions below to install the bmi_era5 package.
 
 #### Stable Release
 
@@ -33,13 +29,13 @@ $ pip install bmi_era5
 
 or conda
 ```
-$ conda install -c conda-forge bmi_era5 
+$ conda install -c conda-forge bmi_era5
 ```
 
 #### From Source
 
-After downloading the source code, run the following command from top-level folder 
-(the one that contains setup.py) to install bmi_era5.
+After downloading the source code, run the following command from top-level folder
+to install bmi_era5.
 ```
 $ pip install -e .
 ```
@@ -50,7 +46,7 @@ Below shows how to use two methods to download the ERA5 datasets.
 You can learn more details from the [tutorial notebook](https://github.com/gantian127/bmi_era5/blob/master/notebooks/bmi_era5.ipynb).
 To run this notebook, please go to the [CSDMS EKT Lab](https://csdms.colorado.edu/wiki/Lab-0018) and follow the instruction in the "Lab notes" section.
 
-#### Example 1: use CDS API to download the ERA5 data 
+#### Example 1: use CDS API to download the ERA5 data
 
 ```python
 import cdsapi
@@ -68,20 +64,21 @@ c.retrieve(
         "year": "2021",
         "month": "01",
         "day": "01",
-        "time": [ "00:00", "01:00", "02:00"],
-        "area": [ 41, -109, 36, -102],
-        "grid": [0.25, 0.25]
+        "time": ["00:00", "01:00", "02:00"],
+        "area": [41, -109, 36, -102],
+        "grid": [0.25, 0.25],
     },
-    "download.nc")
+    "download.nc",
+)
 
 # load netCDF data
 dataset = xarray.open_dataset("download.nc")
 
-# select 2 meter temperature on 2021-01-01 at 00:00 
+# select 2 meter temperature on 2021-01-01 at 00:00
 air_temp = dataset.t2m.isel(time=0)
 
 # plot data
-air_temp.plot(figsize=(9,5))
+air_temp.plot(figsize=(9, 5))
 plt.title("2 metre temperature in Colorado on Jan 1st, 2021 at 00:00")
 ```
 ![tif_plot](docs/source/_static/tif_plot.png)
@@ -98,7 +95,7 @@ data_comp = BmiEra5()
 data_comp.initialize("config_file.yaml")
 
 # get variable info
-for var_name in  data_comp.get_output_var_names():
+for var_name in data_comp.get_output_var_names():
     var_unit = data_comp.get_var_units(var_name)
     var_location = data_comp.get_var_location(var_name)
     var_type = data_comp.get_var_type(var_name)
@@ -113,13 +110,13 @@ for var_name in  data_comp.get_output_var_names():
     print(f"{var_grid=}")
     print(f"{var_itemsize=}")
     print(f"{var_nbytes=}")
-    
+
 # get time info
 start_time = data_comp.get_start_time()
 end_time = data_comp.get_end_time()
 time_step = data_comp.get_time_step()
 time_unit = data_comp.get_time_units()
-time_steps = int((end_time - start_time)/time_step) + 1
+time_steps = int((end_time - start_time) / time_step) + 1
 
 print(f"{start_time=}")
 print(f"{end_time=}")
@@ -127,8 +124,8 @@ print(f"{time_step=}")
 print(f"{time_unit=}")
 print(f"{time_steps=}")
 
-# get variable grid info 
-grid_rank = data_comp.get_grid_rank(var_grid) 
+# get variable grid info
+grid_rank = data_comp.get_grid_rank(var_grid)
 grid_size = data_comp.get_grid_size(var_grid)
 
 grid_shape = np.empty(grid_rank, int)
@@ -146,21 +143,21 @@ print(f"{grid_shape=}")
 print(f"{grid_spacing=}")
 print(f"{grid_origin=}")
 
-# get variable data 
+# get variable data
 data = np.empty(grid_size, var_type)
 data_comp.get_value("2 metre temperature", data)
 data_2D = data.reshape(grid_shape)
 
 # get X, Y extent for plot
 min_y, min_x = grid_origin
-max_y = min_y + grid_spacing[0]*(grid_shape[0]-1)
-max_x = min_x + grid_spacing[1]*(grid_shape[1]-1)
-dy = grid_spacing[0]/2
-dx = grid_spacing[1]/2
+max_y = min_y + grid_spacing[0] * (grid_shape[0] - 1)
+max_x = min_x + grid_spacing[1] * (grid_shape[1] - 1)
+dy = grid_spacing[0] / 2
+dx = grid_spacing[1] / 2
 extent = [min_x - dx, max_x + dx, min_y - dy, max_y + dy]
 
 # plot data
-fig, ax = plt.subplots(1,1, figsize=(9,5))
+fig, ax = plt.subplots(1, 1, figsize=(9, 5))
 im = ax.imshow(data_2D, extent=extent)
 cbar = fig.colorbar(im)
 cbar.set_label("2 metre temperature [K]")
@@ -173,8 +170,3 @@ data_comp.finalize()
 ```
 
 ![tif_plot](docs/source/_static/tif_plot.png)
-
-
-
-
-

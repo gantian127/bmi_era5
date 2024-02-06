@@ -5,13 +5,13 @@
 :target: https://bmi-era5.readthedocs.io/en/latest/
 ```
 
-[bmi_era5 packate][bmi_era5-github] is an implementation of 
+[bmi_era5 package][bmi_era5-github] is an implementation of
 the [Basic Model Interface (BMI)][bmi-docs] for the [ERA5][ERA5] dataset.
-This package uses the [CDS API][cds-api] to download the ERA5 dataset and wraps the 
+This package uses the [CDS API][cds-api] to download the ERA5 dataset and wraps the
 dataset with BMI for data control and query (currently support 3 dimensional ERA5 dataset).
 
 This package is not implemented for people to use but is the key element to convert the ERA5 dataset into
-a data component ([pymt_era5][pymt_era5] for the [PyMT][pymt-docs]
+a data component ([pymt_era5][pymt_era5]) for the [PyMT][pymt-docs]
 modeling framework developed by Community Surface Dynamics Modeling System
 ([CSDMS][csdms]).
 
@@ -36,7 +36,7 @@ conda install -c conda-forge bmi_era5
 
 **From Source**
 
-After downloading the source code, run the following command from top-level folder 
+After downloading the source code, run the following command from top-level folder
 to install bmi_era5.
 
 ```console
@@ -69,11 +69,12 @@ c.retrieve(
         "year": "2021",
         "month": "01",
         "day": "01",
-        "time": [ "00:00", "01:00", "02:00"],
-        "area": [ 41, -109, 36, -102],
-        "grid": [0.25, 0.25]
+        "time": ["00:00", "01:00", "02:00"],
+        "area": [41, -109, 36, -102],
+        "grid": [0.25, 0.25],
     },
-    "download.nc")
+    "download.nc",
+)
 
 # load netCDF data
 dataset = xarray.open_dataset("download.nc")
@@ -82,7 +83,7 @@ dataset = xarray.open_dataset("download.nc")
 air_temp = dataset.t2m.isel(time=0)
 
 # plot data
-air_temp.plot(figsize=(9,5))
+air_temp.plot(figsize=(9, 5))
 plt.title("2 metre temperature in Colorado on Jan 1st, 2021 at 00:00")
 ```
 
@@ -100,7 +101,7 @@ data_comp = BmiEra5()
 data_comp.initialize("config_file.yaml")
 
 # get variable info
-for var_name in  data_comp.get_output_var_names():
+for var_name in data_comp.get_output_var_names():
     var_unit = data_comp.get_var_units(var_name)
     var_location = data_comp.get_var_location(var_name)
     var_type = data_comp.get_var_type(var_name)
@@ -115,13 +116,13 @@ for var_name in  data_comp.get_output_var_names():
     print(f"{var_grid=}")
     print(f"{var_itemsize=}")
     print(f"{var_nbytes=}")
-    
+
 # get time info
 start_time = data_comp.get_start_time()
 end_time = data_comp.get_end_time()
 time_step = data_comp.get_time_step()
 time_unit = data_comp.get_time_units()
-time_steps = int((end_time - start_time)/time_step) + 1
+time_steps = int((end_time - start_time) / time_step) + 1
 
 print(f"{start_time=}")
 print(f"{end_time=}")
@@ -129,8 +130,8 @@ print(f"{time_step=}")
 print(f"{time_unit=}")
 print(f"{time_steps=}")
 
-# get variable grid info 
-grid_rank = data_comp.get_grid_rank(var_grid) 
+# get variable grid info
+grid_rank = data_comp.get_grid_rank(var_grid)
 grid_size = data_comp.get_grid_size(var_grid)
 
 grid_shape = np.empty(grid_rank, int)
@@ -148,21 +149,21 @@ print(f"{grid_shape=}")
 print(f"{grid_spacing=}")
 print(f"{grid_origin=}")
 
-# get variable data 
+# get variable data
 data = np.empty(grid_size, var_type)
 data_comp.get_value("2 metre temperature", data)
 data_2D = data.reshape(grid_shape)
 
 # get X, Y extent for plot
 min_y, min_x = grid_origin
-max_y = min_y + grid_spacing[0]*(grid_shape[0]-1)
-max_x = min_x + grid_spacing[1]*(grid_shape[1]-1)
-dy = grid_spacing[0]/2
-dx = grid_spacing[1]/2
+max_y = min_y + grid_spacing[0] * (grid_shape[0] - 1)
+max_x = min_x + grid_spacing[1] * (grid_shape[1] - 1)
+dy = grid_spacing[0] / 2
+dx = grid_spacing[1] / 2
 extent = [min_x - dx, max_x + dx, min_y - dy, max_y + dy]
 
 # plot data
-fig, ax = plt.subplots(1,1, figsize=(9,5))
+fig, ax = plt.subplots(1, 1, figsize=(9, 5))
 im = ax.imshow(data_2D, extent=extent)
 cbar = fig.colorbar(im)
 cbar.set_label("2 metre temperature [K]")

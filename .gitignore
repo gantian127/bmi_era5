@@ -2,8 +2,8 @@
 *.ipynb_checkpoints/
 *.py[cod]
 .coverage
-.nox/
 .idea/
+.nox/
 __pycache__/
 build/
 dist/
