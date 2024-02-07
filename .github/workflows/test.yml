@@ -30,10 +30,14 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: API Key File
-        env:
+        with:
           CDS_API_KEY: ${{secrets.CDS_API_KEY}}
         run: |
-          echo "$CDS_API_KEY" 
+          cat >.cdsapirc << EOL
+          url: https://cds.climate.copernicus.eu/api/v2
+          key: ${CDS_API_KEY}
+          EOL          
+          cat .cdsapirc 
 
       - name: Test
         run: |
