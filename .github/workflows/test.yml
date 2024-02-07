@@ -28,11 +28,17 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      # test-notebooks is disabled because it requires cdsapi key file
+
+      - name: API Key File
+        env:
+          CDS_API_KEY: ${{secrets.CDS_API_KEY}}
+        run: |
+          echo "$CDS_API_KEY" 
+
       - name: Test
         run: |
           pip install nox
-          nox --non-interactive --error-on-missing-interpreter -s test 
+          nox --non-interactive --error-on-missing-interpreter -s test
 
       - name: Coveralls
         if: matrix.os == 'ubuntu-latest'
