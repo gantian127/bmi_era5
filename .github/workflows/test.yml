@@ -33,11 +33,10 @@ jobs:
         with:
           CDS_API_KEY: ${{secrets.CDS_API_KEY}}
         run: |
-          cat >.cdsapirc << EOL
-          url: https://cds.climate.copernicus.eu/api/v2
-          key: ${CDS_API_KEY}
-          EOL          
-          cat .cdsapirc 
+          echo "url: https://cds.climate.copernicus.eu/api/v2" >> .cdsapirc
+#          echo "$CDS_API_KEY">> .cdsapirc
+#          cat .cdsapirc
+#          pwd
 
       - name: Test
         run: |
