@@ -1,13 +1,11 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
+
 from collections import namedtuple
-from typing import Tuple
 
 import numpy
 import yaml
-
+from bmi_era5.utils import Era5Data
 from bmipy import Bmi
-
-from bmi_era5 import Era5Data
 
 BmiVar = namedtuple(
     "BmiVar", ["dtype", "itemsize", "nbytes", "units", "location", "grid"]
@@ -62,7 +60,7 @@ class BmiEra5(Bmi):
         float
             The current model time.
         """
-        return self._time['time_value'][self._time_index]
+        return self._time["time_value"][self._time_index]
 
     def get_end_time(self) -> float:
         """End time of the model.
@@ -71,9 +69,11 @@ class BmiEra5(Bmi):
         float
             The maximum model time.
         """
-        return self._time['end_time']
+        return self._time["end_time"]
 
-    def get_grid_face_edges(self, grid: int, face_edges: numpy.ndarray) -> numpy.ndarray:
+    def get_grid_face_edges(
+        self, grid: int, face_edges: numpy.ndarray
+    ) -> numpy.ndarray:
         """Get the face-edge connectivity.
 
         Parameters
@@ -323,7 +323,7 @@ class BmiEra5(Bmi):
         """
         raise NotImplementedError("get_grid_z")
 
-    def get_input_var_names(self) -> Tuple[str]:
+    def get_input_var_names(self) -> tuple[str]:
         """List of a model's input variables.
         Input variable names must be CSDMS Standard Names, also known
         as *long variable names*.
@@ -351,7 +351,7 @@ class BmiEra5(Bmi):
         """
         return len(self._input_var_names)
 
-    def get_output_var_names(self) -> Tuple[str]:
+    def get_output_var_names(self) -> tuple[str]:
         """List of a model's output variables.
         Output variable names must be CSDMS Standard Names, also known
         as *long variable names*.
@@ -380,7 +380,7 @@ class BmiEra5(Bmi):
         float
             The model start time.
         """
-        return self._time['start_time']
+        return self._time["start_time"]
 
     def get_time_step(self) -> float:
         """Current time step of the model.
@@ -390,7 +390,7 @@ class BmiEra5(Bmi):
         float
             The time step used in model.
         """
-        return self._time['time_step']
+        return self._time["time_step"]
 
     def get_time_units(self) -> str:
         """Time units of the model.
@@ -402,7 +402,7 @@ class BmiEra5(Bmi):
         -----
         CSDMS uses the UDUNITS standard from Unidata.
         """
-        return self._time['time_units']
+        return self._time["time_units"]
 
     def get_value(self, name: str, dest: numpy.ndarray) -> numpy.ndarray:
         """Get a copy of values of the given variable.
@@ -441,7 +441,8 @@ class BmiEra5(Bmi):
         array_like
             Value of the model variable at the given location.
         """
-        # return the value at current time step with given index in 1D or 2D grid. when it is scalar no need for ind
+        # return the value at current time step with given index in 1D or 2D grid.
+        # when it is scalar no need for ind
         dest[:] = self.get_value_ptr(name).reshape(-1)[inds]
         return dest
 
@@ -459,11 +460,16 @@ class BmiEra5(Bmi):
         array_like
             A reference to a model variable.
         """
-        # return a reference of all the value at current time step. mainly for input data. not useful for scalar value
+        # return a reference of all the value at current time step.
+        # mainly for input data. not useful for scalar value
         add_offset = self._dataset[self._var_name_mapping[name]].add_offset
         scale_factor = self._dataset[self._var_name_mapping[name]].scale_factor
 
-        return self._dataset[self._var_name_mapping[name]].values[self._time_index]*scale_factor + add_offset
+        return (
+            self._dataset[self._var_name_mapping[name]].values[self._time_index]
+            * scale_factor
+            + add_offset
+        )
 
     def get_var_grid(self, name: str) -> int:
         """Get grid identifier for the given variable.
@@ -592,22 +598,23 @@ class BmiEra5(Bmi):
         with placeholder values is used by the BMI.
         """
         if config_file:
-            with open(config_file, "r") as fp:
-                conf = yaml.safe_load(fp).get('bmi-era5', {})
+            with open(config_file) as fp:
+                conf = yaml.safe_load(fp).get("bmi-era5", {})
         else:
-            conf = {'name': 'reanalysis-era5-single-levels',
-                    'path': 'pressure_hour_enm.nc',
-                    'request': {
-                                'product_type': 'reanalysis',
-                                'variable': ['2m_temperature', 'total_precipitation'],
-                                'year': '2021',
-                                'month': '01',
-                                'day': '01',
-                                'time': ['00:00', '01:00', '02:00'],
-                                'format': 'netcdf',
-                                'area': [41, -109, 36, -102],
-                                }
-                    }
+            conf = {
+                "name": "reanalysis-era5-single-levels",
+                "path": "pressure_hour_enm.nc",
+                "request": {
+                    "product_type": "reanalysis",
+                    "variable": ["2m_temperature", "total_precipitation"],
+                    "year": "2021",
+                    "month": "01",
+                    "day": "01",
+                    "time": ["00:00", "01:00", "02:00"],
+                    "format": "netcdf",
+                    "area": [41, -109, 36, -102],
+                },
+            }
             # conf = {'name': 'reanalysis-era5-pressure-levels',
             #         'path': 'pressure_hour_enm.nc',
             #         'request': {
@@ -636,23 +643,25 @@ class BmiEra5(Bmi):
 
         for name, info in var_info.items():
             self._var[name] = BmiVar(
-                dtype=str(info['dtype']),
-                itemsize=info['itemsize'],
-                nbytes=info['nbytes'],  # nbytes for current time step value
-                units=info['units'],  # TODO: translate var name into CSDMS standard name
-                location=info['location'],  # location on a grid (node, face, edge)
+                dtype=str(info["dtype"]),
+                itemsize=info["itemsize"],
+                nbytes=info["nbytes"],  # nbytes for current time step value
+                units=info[
+                    "units"
+                ],  # TODO: translate var name into CSDMS standard name
+                location=info["location"],  # location on a grid (node, face, edge)
                 grid=0,  # grid id number
             )
 
-            self._var_name_mapping[name] = info['var_name']
+            self._var_name_mapping[name] = info["var_name"]
 
         # grid info
         grid_info = era5.get_grid_info()
         self._grid = {
             0: BmiGridUniformRectilinear(
-                shape=grid_info['shape'],
-                yx_spacing=grid_info['yx_spacing'],
-                yx_of_lower_left=grid_info['yx_of_lower_left'],
+                shape=grid_info["shape"],
+                yx_spacing=grid_info["yx_spacing"],
+                yx_of_lower_left=grid_info["yx_of_lower_left"],
             )
         }
 

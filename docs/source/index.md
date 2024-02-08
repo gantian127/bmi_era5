@@ -1,52 +1,57 @@
-# bmi_era5
-[![DOI](https://zenodo.org/badge/402911538.svg)](https://zenodo.org/doi/10.5281/zenodo.10368878)
-[![Documentation Status](https://readthedocs.org/projects/bmi_era5/badge/?version=latest)](https://bmi-era5.readthedocs.io/en/latest/?badge=latest)
-[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/gantian127/bmi_era5/blob/master/LICENSE.txt)
+```{image} _static/bmi_era5_logo.png
+:align: center
+:alt: bmi_era5
+:scale: 22%
+:target: https://bmi-era5.readthedocs.io/en/latest/
+```
 
-
-bmi_era5 package is an implementation of the Basic Model Interface ([BMI](https://bmi-spec.readthedocs.io/en/latest/))
-for the [ERA5](https://confluence.ecmwf.int/display/CKB/ERA5) dataset.
-This package uses the [CDS API](https://cds.climate.copernicus.eu/api-how-to) to download the ERA5 dataset and wraps the dataset with BMI for data control and query
-(currently support 3 dimensional ERA5 dataset).
+[bmi_era5 package][bmi_era5-github] is an implementation of
+the [Basic Model Interface (BMI)][bmi-docs] for the [ERA5][ERA5] dataset.
+This package uses the [CDS API][cds-api] to download the ERA5 dataset and wraps the
+dataset with BMI for data control and query (currently support 3 dimensional ERA5 dataset).
 
 This package is not implemented for people to use but is the key element to convert the ERA5 dataset into
-a data component ([pymt_era5](https://pymt-era5.readthedocs.io/)) for
-the [PyMT](https://pymt.readthedocs.io/en/latest/?badge=latest) modeling framework developed
-by Community Surface Dynamics Modeling System ([CSDMS](https://csdms.colorado.edu/wiki/Main_Page)).
-
-If you have any suggestion to improve the current function, please create a github issue
-[here](https://github.com/gantian127/bmi_era5/issues).
+a data component ([pymt_era5][pymt_era5]) for the [PyMT][pymt-docs]
+modeling framework developed by Community Surface Dynamics Modeling System
+([CSDMS][csdms]).
 
 
-### Install package
+# Installation
 
-#### Stable Release
+**Stable Release**
 
-The bmi_era5 package and its dependencies can be installed with pip
+The bmi_era5 package and its dependencies can be installed with either *pip* or *conda*,
+
+````{tab} pip
+```console
+pip install bmi_era5
 ```
-$ pip install bmi_era5
-```
+````
 
-or conda
+````{tab} conda
+```console
+conda install -c conda-forge bmi_era5
 ```
-$ conda install -c conda-forge bmi_era5
-```
+````
 
-#### From Source
+**From Source**
 
 After downloading the source code, run the following command from top-level folder
 to install bmi_era5.
-```
-$ pip install -e .
+
+```console
+pip install -e .
 ```
 
-### Quick Start
+# Quick Start
+
 Below shows how to use two methods to download the ERA5 datasets.
 
-You can learn more details from the [tutorial notebook](https://github.com/gantian127/bmi_era5/blob/master/notebooks/bmi_era5.ipynb).
-To run this notebook, please go to the [CSDMS EKT Lab](https://csdms.colorado.edu/wiki/Lab-0018) and follow the instruction in the "Lab notes" section.
+You can learn more details from the [tutorial notebook][bmi_era5-notebook].
+To run this notebook, please go to the [CSDMS EKT Lab][bmi_era5-csdms] and follow
+the instruction in the "Lab notes" section.
 
-#### Example 1: use CDS API to download the ERA5 data
+**Example 1**: use CDS API to download the ERA5 data.
 
 ```python
 import cdsapi
@@ -74,17 +79,18 @@ c.retrieve(
 # load netCDF data
 dataset = xarray.open_dataset("download.nc")
 
-# select 2 meter temperature on 2021-01-01 at 00:00
+# select 2 metre temperature on 2021-01-01 at 00:00
 air_temp = dataset.t2m.isel(time=0)
 
 # plot data
 air_temp.plot(figsize=(9, 5))
 plt.title("2 metre temperature in Colorado on Jan 1st, 2021 at 00:00")
 ```
-![tif_plot](docs/source/_static/tif_plot.png)
 
+```{image} _static/tif_plot.png
+```
 
-#### Example 2: use BmiEra5 class to download the ERA5 data (Demonstration of how to use BMI)
+**Example 2**: use BmiEra5 class to download the ERA5 data (Demonstration of how to use BMI).
 
 ```python
 from bmi_era5 import BmiEra5
@@ -169,4 +175,13 @@ plt.title("2 metre temperature in Colorado on Jan 1st, 2021 at 00:00")
 data_comp.finalize()
 ```
 
-![tif_plot](docs/source/_static/tif_plot.png)
+<!-- links -->
+[bmi-docs]: https://bmi.readthedocs.io
+[csdms]: https://csdms.colorado.edu
+[pymt-docs]: https://pymt.readthedocs.io
+[cds-api]: https://cds.climate.copernicus.eu/api-how-to
+[bmi_era5-github]: https://github.com/gantian127/bmi_era5/
+[ERA5]: https://confluence.ecmwf.int/display/CKB/ERA5
+[bmi_era5-notebook]: https://github.com/gantian127/bmi_era5/blob/master/notebooks/bmi_era5.ipynb
+[bmi_era5-csdms]: https://csdms.colorado.edu/wiki/Lab-0018
+[pymt_era5]: https://pymt-era5.readthedocs.io/

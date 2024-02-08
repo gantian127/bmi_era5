@@ -21,4 +21,4 @@ bmi-era5:
     grid:
       - 0.25
       - 0.25
-  path: single_hour.nc
+  path: download.nc
