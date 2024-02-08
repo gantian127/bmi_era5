@@ -41,9 +41,13 @@ jobs:
 
       - name: Test
         run: |
-          pip install setuptools
+          pip install setuptools==69.0.3
           pip install nox
           nox --non-interactive --error-on-missing-interpreter -s test test-notebooks
+
+      - name: list pkg
+        run: |
+          conda list
 
       - name: Coveralls
         if: matrix.os == 'ubuntu-latest'
