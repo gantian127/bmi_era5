@@ -61,6 +61,7 @@ testing = [
     "nbmake",
     "pytest",
     "pytest-cov",
+    "setuptools",
 ]
 
 [build-system]
