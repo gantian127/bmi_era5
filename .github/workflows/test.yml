@@ -42,7 +42,7 @@ jobs:
       - name: Test
         run: |
           pip install nox
-          pip install distribute
+          pip install --upgrade setuptools
           nox --non-interactive --error-on-missing-interpreter -s test test-notebooks
 
       - name: Coveralls
