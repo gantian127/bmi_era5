@@ -37,7 +37,8 @@ jobs:
           echo "url: https://cds.climate.copernicus.eu/api/v2" >> .cdsapirc
           echo key: $CDS_API_KEY >> .cdsapirc
           cat .cdsapirc
-          mv .cdsapirc /home/runner/
+          mv .cdsapirc ~/
+          ls ~/
 
       - name: Test
         run: |
