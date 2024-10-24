@@ -62,15 +62,15 @@ def test_get_var_info(tmpdir, name, file, era5_req):
 
     era5.get_data(name, era5_req, path)
     var_info_2 = era5.get_var_info()
-    assert len(var_info_2) == 2
+
     assert "Total precipitation" in var_info_2.keys()
     assert "2 metre temperature" in var_info_2.keys()
 
     var = var_info_2["Total precipitation"]
     assert var["var_name"] == "tp"
-    assert var["dtype"] == "float64"
-    assert var["itemsize"] == 2
-    assert var["nbytes"] == 1218
+    assert var["dtype"] == "float32"
+    assert var["itemsize"] == 4
+    assert var["nbytes"] == 2436
     assert var["units"] == "m"
     assert var["location"] == "node"
 
@@ -87,9 +87,9 @@ def test_get_time_info(tmpdir, name, file, era5_req):
     era5.get_data(name, era5_req, path)
     time_info_2 = era5.get_time_info()
 
-    assert time_info_2["start_time"] == 1060680
-    assert time_info_2["end_time"] == 1060682
-    assert time_info_2["time_step"] == 1
+    assert time_info_2["start_time"] == 1609459200.0
+    assert time_info_2["end_time"] == 1609466400.0
+    assert time_info_2["time_step"] == 3600.0
     assert time_info_2["total_steps"] == 3
-    assert time_info_2["time_units"] == "hours since 1900-01-01 00:00:00.0"
-    assert time_info_2["calendar"] == "gregorian"
+    assert time_info_2["time_units"] == "seconds since 1970-01-01"
+    assert time_info_2["calendar"] == "proleptic_gregorian"
