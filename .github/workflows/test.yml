@@ -38,6 +38,8 @@ jobs:
           echo key: $CDS_API_KEY >> .cdsapirc
           cat .cdsapirc
           mv .cdsapirc ~/
+          ls ~
+          pwd
 
       - name: Test
         run: |
