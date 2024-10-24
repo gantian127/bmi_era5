@@ -3,7 +3,7 @@
 [![Documentation Status](https://readthedocs.org/projects/bmi_era5/badge/?version=latest)](https://bmi-era5.readthedocs.io/en/latest/?badge=latest)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/gantian127/bmi_era5/blob/master/LICENSE.txt)
 
-**Please note: starting with release v0.1.5, the New CDS platform is now supported.**
+**Please note: Starting with release v0.2.0, the New CDS platform is now supported.**
 
 bmi_era5 package is an implementation of the Basic Model Interface ([BMI](https://bmi-spec.readthedocs.io/en/latest/))
 for the [ERA5](https://confluence.ecmwf.int/display/CKB/ERA5) dataset.
