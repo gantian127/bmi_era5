@@ -8,7 +8,8 @@
 [bmi_era5 package][bmi_era5-github] is an implementation of
 the [Basic Model Interface (BMI)][bmi-docs] for the [ERA5][ERA5] dataset.
 This package uses the [CDS API][cds-api] to download the ERA5 dataset and wraps the
-dataset with BMI for data control and query (currently support 3 dimensional ERA5 dataset).
+dataset with BMI for data control and query. It currently supports 3-dimensional ERA5
+datasets defined with dimensions as [valid_time, latitude, longitude].
 
 This package is not implemented for people to use but is the key element to convert the ERA5 dataset into
 a data component ([pymt_era5][pymt_era5]) for the [PyMT][pymt-docs]
@@ -80,7 +81,7 @@ c.retrieve(
 dataset = xarray.open_dataset("download.nc")
 
 # select 2 metre temperature on 2021-01-01 at 00:00
-air_temp = dataset.t2m.isel(time=0)
+air_temp = dataset.t2m.isel(valid_time=0)
 
 # plot data
 air_temp.plot(figsize=(9, 5))
@@ -179,7 +180,7 @@ data_comp.finalize()
 [bmi-docs]: https://bmi.readthedocs.io
 [csdms]: https://csdms.colorado.edu
 [pymt-docs]: https://pymt.readthedocs.io
-[cds-api]: https://cds.climate.copernicus.eu/api-how-to
+[cds-api]: https://cds.climate.copernicus.eu/how-to-api
 [bmi_era5-github]: https://github.com/gantian127/bmi_era5/
 [ERA5]: https://confluence.ecmwf.int/display/CKB/ERA5
 [bmi_era5-notebook]: https://github.com/gantian127/bmi_era5/blob/master/notebooks/bmi_era5.ipynb
