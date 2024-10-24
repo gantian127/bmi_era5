@@ -29,19 +29,23 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: API Key File
-        shell: bash
-        env:
-          CDS_API_KEY: ${{secrets.CDS_API_KEY}}
-        run: |
-          echo "https://cds.climate.copernicus.eu/api" >> .cdsapirc
-          echo key: $CDS_API_KEY >> .cdsapirc
-          cat .cdsapirc
-          cp .cdsapirc ~/
-          ls -a ~
-          ls -a 
+#      - name: API Key File
+#        shell: bash
+#        env:
+#          CDS_API_KEY: ${{secrets.CDS_API_KEY}}
+#        run: |
+#          echo "https://cds.climate.copernicus.eu/api" >> .cdsapirc
+#          echo key: $CDS_API_KEY >> .cdsapirc
+#          cat .cdsapirc
+#          cp .cdsapirc ~/
+#          cp .cdsapirc ./notebooks
+#          cp .cdsapirc ./tests
+#          ls -a ~
+#          ls -a
 
       - name: Test
+        env:
+          CDS_API_KEY: ${{secrets.CDS_API_KEY}}
         run: |
           pip install nox
           pip install --upgrade setuptools
