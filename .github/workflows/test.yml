@@ -20,7 +20,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
 
     steps:
       - uses: actions/checkout@v4
@@ -34,7 +34,7 @@ jobs:
         env:
           CDS_API_KEY: ${{secrets.CDS_API_KEY}}
         run: |
-          echo "url: https://cds.climate.copernicus.eu/api/v2" >> .cdsapirc
+          echo "https://cds.climate.copernicus.eu/api" >> .cdsapirc
           echo key: $CDS_API_KEY >> .cdsapirc
           cat .cdsapirc
           mv .cdsapirc ~/
