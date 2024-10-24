@@ -462,14 +462,8 @@ class BmiEra5(Bmi):
         """
         # return a reference of all the value at current time step.
         # mainly for input data. not useful for scalar value
-        add_offset = self._dataset[self._var_name_mapping[name]].add_offset
-        scale_factor = self._dataset[self._var_name_mapping[name]].scale_factor
 
-        return (
-            self._dataset[self._var_name_mapping[name]].values[self._time_index]
-            * scale_factor
-            + add_offset
-        )
+        return self._dataset[self._var_name_mapping[name]].values[self._time_index]
 
     def get_var_grid(self, name: str) -> int:
         """Get grid identifier for the given variable.
