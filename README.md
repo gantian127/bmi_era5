@@ -9,7 +9,8 @@ bmi_era5 package is an implementation of the Basic Model Interface ([BMI](https:
 for the [ERA5](https://confluence.ecmwf.int/display/CKB/ERA5) dataset.
 This package uses the [CDS API](https://cds.climate.copernicus.eu/how-to-api) to download
 the ERA5 dataset and wraps the dataset with BMI for data control and query.
-It currently supports 3-dimensional ERA5 datasets defined with dimensions as [valid_time, latitude, longitude].
+It currently supports 3-dimensional ERA5
+datasets defined with dimensions such as valid_time (or date), latitude, and longitude.
 
 This package is not implemented for people to use but is the key element to convert the ERA5 dataset into
 a data component ([pymt_era5](https://pymt-era5.readthedocs.io/)) for
