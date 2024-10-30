@@ -3,20 +3,21 @@
 [![Documentation Status](https://readthedocs.org/projects/bmi_era5/badge/?version=latest)](https://bmi-era5.readthedocs.io/en/latest/?badge=latest)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/gantian127/bmi_era5/blob/master/LICENSE.txt)
 
-**Please be aware that the CDS platform was upgraded in September 2024, which has resulted in the current bmi_era5 being incompatible with the latest version of the CDS platform. 
-A new release of bmi_era5 is expected later this year.** 
+**Please note: Starting with release v0.2.0, the New CDS platform is now supported.**
 
 bmi_era5 package is an implementation of the Basic Model Interface ([BMI](https://bmi-spec.readthedocs.io/en/latest/))
 for the [ERA5](https://confluence.ecmwf.int/display/CKB/ERA5) dataset.
-This package uses the [CDS API](https://cds.climate.copernicus.eu/api-how-to) to download the ERA5 dataset and wraps the dataset with BMI for data control and query
-(currently support 3 dimensional ERA5 dataset).
+This package uses the [CDS API](https://cds.climate.copernicus.eu/how-to-api) to download
+the ERA5 dataset and wraps the dataset with BMI for data control and query.
+It currently supports 3-dimensional ERA5
+datasets defined with dimensions such as valid_time (or date), latitude, and longitude.
 
 This package is not implemented for people to use but is the key element to convert the ERA5 dataset into
 a data component ([pymt_era5](https://pymt-era5.readthedocs.io/)) for
 the [PyMT](https://pymt.readthedocs.io/en/latest/?badge=latest) modeling framework developed
 by Community Surface Dynamics Modeling System ([CSDMS](https://csdms.colorado.edu/wiki/Main_Page)).
 
-If you have any suggestion to improve the current function, please create a github issue
+If you have any suggestion to improve the current function, please create a GitHub issue
 [here](https://github.com/gantian127/bmi_era5/issues).
 
 
@@ -77,7 +78,7 @@ c.retrieve(
 dataset = xarray.open_dataset("download.nc")
 
 # select 2 meter temperature on 2021-01-01 at 00:00
-air_temp = dataset.t2m.isel(time=0)
+air_temp = dataset.t2m.isel(valid_time=0)
 
 # plot data
 air_temp.plot(figsize=(9, 5))

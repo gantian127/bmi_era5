@@ -5,7 +5,7 @@ import os
 
 def install_cds(config_path=""):
     # create configuration file
-    url = "https://cds.climate.copernicus.eu/api/v2"
+    url = "https://cds.climate.copernicus.eu/api"
     key = input("Enter Your CDS API Key: ")
     config_content = f"url: {url} \nkey: {key}"
 
@@ -16,8 +16,3 @@ def install_cds(config_path=""):
         config_file.write(config_content)
 
     print("CDS API Key file is created.")
-
-    # # install cdsapi
-    # install = subprocess.run(["pip", "install", "cdsapi"], check=True)
-    # if install.returncode == 0:
-    #     print('cdsapi package is successfully installed.')

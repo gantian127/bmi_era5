@@ -15,6 +15,15 @@ def test(session: nox.Session) -> None:
     """Run the tests."""
     session.install(".[testing]")
 
+    # create API key file for ERA5 (need GitHub secret)
+    url = "https://cds.climate.copernicus.eu/api"
+    key = os.environ.get("CDS_API_KEY")
+    config_content = f"url: {url} \nkey: {key}"
+    home_dir = os.path.expanduser("~")
+    config_path = os.path.join(home_dir, ".cdsapirc")
+    with open(config_path, "w") as config_file:
+        config_file.write(config_content)
+
     args = ["--cov", PROJECT, "-vvv"] + session.posargs
 
     if "CI" in os.environ:

@@ -1,8 +1,11 @@
 from __future__ import annotations
 
 import os.path
+from datetime import datetime
 
 import cdsapi
+import cftime
+import numpy as np
 import xarray as xr
 
 
@@ -81,17 +84,44 @@ class Era5Data:
 
         # time values are float in BMI time function
         if self._data:
-            time_info = {
-                "start_time": float(self._data.time.values[0]),
-                "time_step": 0.0
-                if len(self._data.time.values) == 1
-                else float(self._data.time.values[1] - self._data.time.values[0]),
-                "end_time": float(self._data.time.values[-1]),
-                "total_steps": len(self._data.time.values),
-                "time_units": self._data.time.units,
-                "calendar": self._data.time.calendar,
-                "time_value": self._data.time.values.astype("float"),
-            }
+            if "valid_time" in self._data.keys():
+                time_info = {
+                    "start_time": float(self._data.valid_time.values[0]),
+                    "time_step": 0.0
+                    if len(self._data.valid_time.values) == 1
+                    else float(
+                        self._data.valid_time.values[1]
+                        - self._data.valid_time.values[0]
+                    ),
+                    "end_time": float(self._data.valid_time.values[-1]),
+                    "total_steps": len(self._data.valid_time.values),
+                    "time_units": self._data.valid_time.units,
+                    "calendar": self._data.valid_time.calendar,
+                    "time_value": self._data.valid_time.values.astype("float"),
+                }
+            elif "date" in self._data.keys():
+                # convert date time to CF convention values
+                date_objs = [
+                    datetime.strptime(str(date_value), "%Y%m%d")
+                    for date_value in self._data.date.values
+                ]
+                time_units = "seconds since 1970-01-01"
+                calendar = "proleptic_gregorian"
+                cf_dates = cftime.date2num(
+                    date_objs, units=time_units, calendar=calendar
+                )
+
+                time_info = {
+                    "start_time": float(cf_dates[0]),
+                    "time_step": 0.0
+                    if len(cf_dates) == 1
+                    else float(cf_dates[1] - cf_dates[0]),
+                    "end_time": float(cf_dates[-1]),
+                    "total_steps": len(cf_dates),
+                    "time_units": time_units,
+                    "calendar": calendar,
+                    "time_value": np.array(cf_dates, dtype=float),
+                }
 
         return time_info
 
@@ -101,16 +131,16 @@ class Era5Data:
         if self._data:
             for var_name in self._data.data_vars:
                 var = self._data.data_vars[var_name]
-
-                var_info[var.long_name] = {
-                    "var_name": var_name,
-                    "dtype": type(var.scale_factor).__name__
-                    if "scale_factor" in var.attrs.keys()
-                    else str(var.dtype),
-                    "itemsize": var.values.itemsize,
-                    "nbytes": var.values[0].nbytes,  # current time step nbytes
-                    "units": var.units,
-                    "location": "node",
-                }
+                if var.ndim >= 3:
+                    var_info[var.long_name] = {
+                        "var_name": var_name,
+                        "dtype": type(var.scale_factor).__name__
+                        if "scale_factor" in var.attrs.keys()
+                        else str(var.dtype),
+                        "itemsize": var.values.itemsize,
+                        "nbytes": var.values[0].nbytes,  # current time step nbytes
+                        "units": var.units,
+                        "location": "node",
+                    }
 
         return var_info

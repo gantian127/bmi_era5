@@ -20,7 +20,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
 
     steps:
       - uses: actions/checkout@v4
@@ -29,17 +29,9 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: API Key File
-        shell: bash
+      - name: Test
         env:
           CDS_API_KEY: ${{secrets.CDS_API_KEY}}
-        run: |
-          echo "url: https://cds.climate.copernicus.eu/api/v2" >> .cdsapirc
-          echo key: $CDS_API_KEY >> .cdsapirc
-          cat .cdsapirc
-          mv .cdsapirc ~/
-
-      - name: Test
         run: |
           pip install nox
           pip install --upgrade setuptools
