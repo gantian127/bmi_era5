@@ -35,6 +35,7 @@ dependencies = [
     "requests",
     "xarray",
     "cdsapi >= 0.7.2",
+    "cftime",
 ]
 dynamic = [
     "version",
