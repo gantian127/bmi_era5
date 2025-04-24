@@ -78,7 +78,7 @@ c.retrieve(
     {
         "product_type": "reanalysis",
         "format": "netcdf",
-        "variable": ["2m_temperature", "total_precipitation"],
+        "variable": ["2m_temperature"],
         "year": "2021",
         "month": "01",
         "day": "01",
@@ -114,21 +114,21 @@ data_comp = BmiEra5()
 data_comp.initialize("config_file.yaml")
 
 # get variable info
-for var_name in data_comp.get_output_var_names():
-    var_unit = data_comp.get_var_units(var_name)
-    var_location = data_comp.get_var_location(var_name)
-    var_type = data_comp.get_var_type(var_name)
-    var_grid = data_comp.get_var_grid(var_name)
-    var_itemsize = data_comp.get_var_itemsize(var_name)
-    var_nbytes = data_comp.get_var_nbytes(var_name)
+var_name = data_comp.get_output_var_names()[0]
+var_unit = data_comp.get_var_units(var_name)
+var_location = data_comp.get_var_location(var_name)
+var_type = data_comp.get_var_type(var_name)
+var_grid = data_comp.get_var_grid(var_name)
+var_itemsize = data_comp.get_var_itemsize(var_name)
+var_nbytes = data_comp.get_var_nbytes(var_name)
 
-    print(f"{var_name=}")
-    print(f"{var_unit=}")
-    print(f"{var_location=}")
-    print(f"{var_type=}")
-    print(f"{var_grid=}")
-    print(f"{var_itemsize=}")
-    print(f"{var_nbytes=}")
+print(f"{var_name=}")
+print(f"{var_unit=}")
+print(f"{var_location=}")
+print(f"{var_type=}")
+print(f"{var_grid=}")
+print(f"{var_itemsize=}")
+print(f"{var_nbytes=}")
 
 # get time info
 start_time = data_comp.get_start_time()
