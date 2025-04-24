@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-import os.path
+import os
+import zipfile
 from datetime import datetime
 
 import cdsapi
@@ -21,12 +22,45 @@ class Era5Data:
         return self._data
 
     def get_data(self, name, request, path):
+        # check file format
+        file_path, ext = os.path.splitext(path)
+
+        if ext not in [".nc", ".zip"]:
+            raise "Please provide a valid path with '.nc' or '.zip' file extension."
+
+        # download file if not exists
         if not os.path.exists(path):
             c = cdsapi.Client()
             c.retrieve(name, request, path)
 
-        self._data = xr.open_dataset(path, decode_cf=False)
-        self._path = path
+        # check file format and load data
+        with open(path, "rb") as f:  # Read the first 4 bytes
+            header = f.read(4)
+        if header.startswith(b"CDF") or header.startswith(b"\x89HDF"):  # netcdf
+            nc_path = file_path + ".nc"
+            os.rename(path, nc_path)
+            self._data = xr.open_dataset(nc_path, decode_cf=False)
+            self._path = nc_path
+        elif header.startswith(b"PK\x03\x04"):  # zip file
+            zip_path = file_path + ".zip"
+            os.rename(path, zip_path)
+            os.makedirs(file_path, exist_ok=True)
+            with zipfile.ZipFile(zip_path, "r") as zip_ref:
+                zip_ref.extractall(file_path)
+            data_list = [
+                xr.open_dataset(os.path.join(file_path, sub_file))
+                for sub_file in os.listdir(file_path)
+                if ".nc" in sub_file
+            ]
+            try:
+                self._data = xr.merge(data_list)
+            except Exception:
+                raise f"Failed to load datasets at {file_path}"
+            self._path = zip_path
+        else:
+            raise "Dataset is stored as unknown file format."
+
+        print(f"The dataset is stored in {self._path}")
         self._name = name
         self._request = request
 
@@ -81,47 +115,49 @@ class Era5Data:
 
     def get_time_info(self):
         time_info = {}
+        time_var = None
 
         # time values are float in BMI time function
         if self._data:
-            if "valid_time" in self._data.keys():
-                time_info = {
-                    "start_time": float(self._data.valid_time.values[0]),
-                    "time_step": 0.0
-                    if len(self._data.valid_time.values) == 1
-                    else float(
-                        self._data.valid_time.values[1]
-                        - self._data.valid_time.values[0]
-                    ),
-                    "end_time": float(self._data.valid_time.values[-1]),
-                    "total_steps": len(self._data.valid_time.values),
-                    "time_units": self._data.valid_time.units,
-                    "calendar": self._data.valid_time.calendar,
-                    "time_value": self._data.valid_time.values.astype("float"),
-                }
-            elif "date" in self._data.keys():
-                # convert date time to CF convention values
-                date_objs = [
-                    datetime.strptime(str(date_value), "%Y%m%d")
-                    for date_value in self._data.date.values
-                ]
-                time_units = "seconds since 1970-01-01"
-                calendar = "proleptic_gregorian"
-                cf_dates = cftime.date2num(
-                    date_objs, units=time_units, calendar=calendar
-                )
+            for time_var_name in ["valid_time", "date"]:
+                if time_var_name in self._data.keys():
+                    time_var = self._data[time_var_name]
+                    break
 
-                time_info = {
-                    "start_time": float(cf_dates[0]),
-                    "time_step": 0.0
-                    if len(cf_dates) == 1
-                    else float(cf_dates[1] - cf_dates[0]),
-                    "end_time": float(cf_dates[-1]),
-                    "total_steps": len(cf_dates),
-                    "time_units": time_units,
-                    "calendar": calendar,
-                    "time_value": np.array(cf_dates, dtype=float),
-                }
+            if time_var is not None:
+                if "units" in time_var.attrs and "calendar" in time_var.attrs:
+                    # time_var follows CF convention values
+                    time_info = {
+                        "start_time": float(time_var.values[0]),
+                        "time_step": 0.0
+                        if len(time_var.values) == 1
+                        else float(time_var.values[1] - time_var.values[0]),
+                        "end_time": float(time_var.values[-1]),
+                        "total_steps": len(time_var.values),
+                        "time_units": time_var.units,
+                        "calendar": time_var.calendar,
+                        "time_value": time_var.values.astype("float"),
+                    }
+                else:
+                    # convert date time to CF convention values
+                    date_objs = time_var.values.astype("datetime64[s]").astype("O")
+                    time_units = "seconds since 1970-01-01"
+                    calendar = "proleptic_gregorian"
+                    cf_dates = cftime.date2num(
+                        date_objs, units=time_units, calendar=calendar
+                    )
+
+                    time_info = {
+                        "start_time": float(cf_dates[0]),
+                        "time_step": 0.0
+                        if len(cf_dates) == 1
+                        else float(cf_dates[1] - cf_dates[0]),
+                        "end_time": float(cf_dates[-1]),
+                        "total_steps": len(cf_dates),
+                        "time_units": time_units,
+                        "calendar": calendar,
+                        "time_value": np.array(cf_dates, dtype=float),
+                    }
 
         return time_info
 
