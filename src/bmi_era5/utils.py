@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import os
 import zipfile
-from datetime import datetime
 
 import cdsapi
 import cftime
@@ -26,7 +25,9 @@ class Era5Data:
         file_path, ext = os.path.splitext(path)
 
         if ext not in [".nc", ".zip"]:
-            raise "Please provide a valid path with '.nc' or '.zip' file extension."
+            raise ValueError(
+                "Please provide a valid path with '.nc' or '.zip' file extension."
+            )
 
         # download file if not exists
         if not os.path.exists(path):
@@ -55,14 +56,15 @@ class Era5Data:
             try:
                 self._data = xr.merge(data_list)
             except Exception:
-                raise f"Failed to load datasets at {file_path}"
+                print(f"Failed to load the dataset from {file_path}")
+
             self._path = zip_path
         else:
-            raise "Dataset is stored as unknown file format."
+            raise TypeError("The dataset is saved in an unsupported file format.")
 
-        print(f"The dataset is stored in {self._path}")
         self._name = name
         self._request = request
+        print(f"The dataset is saved in {self._path}")
 
         return self.data
 
