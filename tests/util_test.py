@@ -6,10 +6,27 @@ import pytest
 import xarray
 from bmi_era5 import Era5Data
 
-parameters = [
+parameters1 = [
     (
         "reanalysis-era5-single-levels",
-        "single_hour.nc",
+        "single_hour_nc.nc",
+        {
+            "product_type": "reanalysis",
+            "variable": ["2m_temperature"],
+            "year": "2021",
+            "month": "01",
+            "day": "01",
+            "time": ["00:00", "01:00", "02:00"],
+            "format": "netcdf",
+            "area": [41, -109, 36, -102],
+            "grid": [0.25, 0.25],
+        },
+    )
+]
+parameters2 = [
+    (
+        "reanalysis-era5-single-levels",
+        "single_hour_zip.zip",
         {
             "product_type": "reanalysis",
             "variable": ["2m_temperature", "total_precipitation"],
@@ -23,8 +40,7 @@ parameters = [
         },
     )
 ]
-
-parameters2 = [
+parameters3 = [
     (
         "reanalysis-era5-single-levels-monthly-means",
         "monthly_mean.nc",
@@ -33,7 +49,7 @@ parameters2 = [
             "variable": ["2m_dewpoint_temperature"],
             "year": ["2022"],
             "month": ["01", "02", "03", "04"],
-            "time": ["00:00"],
+            "time": ["00:00", "10:00"],
             "data_format": "netcdf",
             "download_format": "unarchived",
             "area": [39, -106, 36, -103],
@@ -42,16 +58,25 @@ parameters2 = [
 ]
 
 
-@pytest.mark.parametrize("name, file, era5_req", parameters)
+@pytest.mark.parametrize("name, file, era5_req", parameters1)
+def test_get_data_invalid_file(tmpdir, name, file, era5_req):
+    path = os.path.join(tmpdir, "wrong_ext.txt")
+    with pytest.raises(ValueError):
+        Era5Data().get_data(name, era5_req, path)
+
+
+@pytest.mark.parametrize(
+    "name, file, era5_req", parameters1 + parameters2 + parameters3
+)
 def test_get_data(tmpdir, name, file, era5_req):
     path = os.path.join(tmpdir, file)
     data = Era5Data().get_data(name, era5_req, path)
 
     assert isinstance(data, xarray.core.dataset.Dataset)
-    assert len(os.listdir(tmpdir)) == 1
+    assert os.path.isfile(path)
 
 
-@pytest.mark.parametrize("name, file, era5_req", parameters)
+@pytest.mark.parametrize("name, file, era5_req", parameters1 + parameters2)
 def test_get_grid_info(tmpdir, name, file, era5_req):
     path = os.path.join(tmpdir, file)
 
@@ -68,7 +93,7 @@ def test_get_grid_info(tmpdir, name, file, era5_req):
     assert grid_info_2["yx_of_lower_left"] == (36.0, -109.0)
 
 
-@pytest.mark.parametrize("name, file, era5_req", parameters)
+@pytest.mark.parametrize("name, file, era5_req", parameters2)
 def test_get_var_info(tmpdir, name, file, era5_req):
     path = os.path.join(tmpdir, file)
 
@@ -92,7 +117,7 @@ def test_get_var_info(tmpdir, name, file, era5_req):
     assert var["location"] == "node"
 
 
-@pytest.mark.parametrize("name, file, era5_req", parameters)
+@pytest.mark.parametrize("name, file, era5_req", parameters1 + parameters2)
 def test_get_time_info_valid_time(tmpdir, name, file, era5_req):
     """Test when time variable is valid_time"""
     path = os.path.join(tmpdir, file)
@@ -113,9 +138,9 @@ def test_get_time_info_valid_time(tmpdir, name, file, era5_req):
     assert time_info_2["calendar"] == "proleptic_gregorian"
 
 
-@pytest.mark.parametrize("name, file, era5_req", parameters2)
+@pytest.mark.parametrize("name, file, era5_req", parameters3)
 def test_get_time_info_date(tmpdir, name, file, era5_req):
-    """Test when time variable is date"""
+    """Test when time variable is date."""
 
     path = os.path.join(tmpdir, file)
 
