@@ -3,6 +3,7 @@ bmi-era5:
   request:
     variable:
       - 2m_temperature
+      - total_precipitation
     product_type: reanalysis
     year: 2021
     month: 01
@@ -20,4 +21,4 @@ bmi-era5:
     grid:
       - 0.25
       - 0.25
-  path: case1.nc
+  path: case2.zip
